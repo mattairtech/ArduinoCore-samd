@@ -98,6 +98,16 @@ const PinDescription g_APinDescription[]=
 
 const void* g_apTCInstances[TCC_INST_NUM+TC_INST_NUM]={ TCC0, TCC1, TCC2, TC0, TC1, TC2, TC3, TC4 } ;
 
+void initVariant() {
+  //Init Osiclator and Rf switch
+  pinMode(RFM_TCX_ON, OUTPUT);
+  pinMode(RFM_RFSW_ON, OUTPUT);
+  //Enable Oscilator and Rf switch
+  digitalWrite(RFM_TCX_ON, HIGH);
+  digitalWrite(RFM_RFSW_ON, HIGH);
+  delay(1);
+}
+
 // Multi-serial objects instantiation
 SERCOM sercom0( SERCOM0 ) ;
 SERCOM sercom1( SERCOM1 ) ;
