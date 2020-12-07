@@ -33,7 +33,7 @@ rm -rf $FILENAME
 cd ..
 cp -R $FOLDERNAME samd
 pwd
-tar --exclude=extras/** --exclude=realese --exclude=.git* -jcvf $FILENAME samd 
+gtar --exclude-vcs --exclude extras --exclude realese -jcvf $FILENAME samd 
 rm -rf samd
 cd -
 pwd
