@@ -113,6 +113,10 @@ extern "C"
 #define PIN_LED2  (1u)
 #define PIN_LED3  (2u)
 
+#define BUTTON_0  (27u)
+#define BUTTON_1  (11u)
+#define BUTTON_2  (10u)
+
 // On-board SPI Flash
 #define EXTERNAL_FLASH_DEVICES  GD25Q16C
 #define EXTERNAL_FLASH_USE_SPI  SPI
