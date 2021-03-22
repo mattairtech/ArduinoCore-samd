@@ -16,18 +16,47 @@
 #ifndef _VARIANT_ARDUINO_ZERO_
 #define _VARIANT_ARDUINO_ZERO_
 
-// The definitions here needs a SAMD core >=1.6.6
-#define ARDUINO_SAMD_VARIANT_COMPLIANCE 10606
+// The definitions here needs a SAMD core >=1.6.8
+#define MATTAIRTECH_ARDUINO_SAMD_VARIANT_COMPLIANCE 10618
 
 /*----------------------------------------------------------------------------
  *        Definitions
  *----------------------------------------------------------------------------*/
 
 /** Frequency of the board main oscillator */
-#define VARIANT_MAINOSC		(32768ul)
+//#define VARIANT_MAINOSC		(32768ul)
 
 /** Master clock frequency */
 #define VARIANT_MCK			  (48000000ul)
+
+/* If CLOCKCONFIG_HS_CRYSTAL is defined, then HS_CRYSTAL_FREQUENCY_HERTZ
+ * must also be defined with the external crystal frequency in Hertz.
+ */
+#define HS_CRYSTAL_FREQUENCY_HERTZ      16000000UL
+
+/* If the PLL is used (CLOCKCONFIG_32768HZ_CRYSTAL, or CLOCKCONFIG_HS_CRYSTAL
+ * defined), then PLL_FRACTIONAL_ENABLED can be defined, which will result in
+ * a more accurate 48MHz output frequency at the expense of increased jitter.
+ */
+//#define PLL_FRACTIONAL_ENABLED
+
+/* If both PLL_FAST_STARTUP and CLOCKCONFIG_HS_CRYSTAL are defined, the crystal
+ * will be divided down to 1MHz - 2MHz, rather than 32KHz - 64KHz, before being
+ * multiplied by the PLL. This will result in a faster lock time for the PLL,
+ * however, it will also result in a less accurate PLL output frequency if the
+ * crystal is not divisible (without remainder) by 1MHz. In this case, define
+ * PLL_FRACTIONAL_ENABLED as well.
+ */
+//#define PLL_FAST_STARTUP
+
+/* The fine calibration value for DFLL open-loop mode is defined here.
+ * The coarse calibration value is loaded from NVM OTP (factory calibration values).
+ */
+#define NVM_SW_CALIB_DFLL48M_FINE_VAL     (512)
+
+/* Define CORTEX_M_CACHE_ENABLED to enable the Cortex M cache (D51 only).
+ */
+#define CORTEX_M_CACHE_ENABLED
 
 /*----------------------------------------------------------------------------
  *        Headers
@@ -48,10 +77,12 @@ extern "C"
 /*----------------------------------------------------------------------------
  *        Pins
  *----------------------------------------------------------------------------*/
+// Number of pins defined in PinDescription array
+#define NUM_PIN_DESCRIPTION_ENTRIES     (31u)
 
 // Number of pins defined in PinDescription array
-#define PINS_COUNT           (31u)
-#define NUM_DIGITAL_PINS     (31u)
+#define PINS_COUNT           NUM_PIN_DESCRIPTION_ENTRIES
+#define NUM_DIGITAL_PINS     PINS_COUNT
 #define NUM_ANALOG_INPUTS    (0u)
 #define NUM_ANALOG_OUTPUTS   (0u)
 #define analogInputToDigitalPin(p)  ((p < 3u) ? (p) + PIN_A0 : -1)
@@ -82,6 +113,10 @@ extern "C"
 #define PIN_LED2  (1u)
 #define PIN_LED3  (2u)
 
+#define BUTTON_0  (27u)
+#define BUTTON_1  (11u)
+#define BUTTON_2  (10u)
+
 // On-board SPI Flash
 #define EXTERNAL_FLASH_DEVICES  GD25Q16C
 #define EXTERNAL_FLASH_USE_SPI  SPI
@@ -93,6 +128,9 @@ extern "C"
 static const uint8_t A0  = PIN_A0;
 
 #define ADC_RESOLUTION		12
+
+/* Set default analog voltage reference */
+#define VARIANT_AR_DEFAULT	AR_DEFAULT
 
 /*
  * SPI Interfaces
@@ -128,7 +166,7 @@ static const uint8_t SCL = PIN_WIRE_SCL;
 /*
  * USB
  */
-#define PIN_USB_HOST_ENABLE 0
+#define PIN_USB_HOST_ENABLE_VALUE -1
 #define PIN_USB_DM          (24ul)
 #define PIN_USB_DP          (25ul)
 
