@@ -83,8 +83,8 @@ extern "C"
 // Number of pins defined in PinDescription array
 #define PINS_COUNT           NUM_PIN_DESCRIPTION_ENTRIES
 #define NUM_DIGITAL_PINS     PINS_COUNT
-#define NUM_ANALOG_INPUTS    (0u)
-#define NUM_ANALOG_OUTPUTS   (0u)
+#define NUM_ANALOG_INPUTS    (1u)
+#define NUM_ANALOG_OUTPUTS   (1u)
 #define analogInputToDigitalPin(p)  ((p < 3u) ? (p) + PIN_A0 : -1)
 
 #define digitalPinToPort(P)        ( &(PORT->Group[g_APinDescription[P].ulPort]) )
@@ -124,8 +124,10 @@ extern "C"
 
 /* Analog pins*/
 #define PIN_A0               (3ul)
+#define PIN_DAC0             (2ul)
 
 static const uint8_t A0  = PIN_A0;
+static const uint8_t DAC0 = PIN_DAC0;
 
 #define ADC_RESOLUTION		12
 
