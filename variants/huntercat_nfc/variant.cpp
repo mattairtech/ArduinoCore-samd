@@ -73,7 +73,7 @@ const PinDescription g_APinDescription[]=
   //GPIO dont exist 
   { NOT_A_PORT, 0, PIO_NOT_A_PIN, PER_ATTR_NONE, PIN_ATTR_NONE, NOT_ON_TIMER, No_ADC_Channel, EXTERNAL_INT_NONE, GCLK_CCL_NONE },
   
-  // 27 - Button
+  // 27 - Button 0
   { PORTA, 27, PIO_MULTI, PER_ATTR_DRIVE_STD, PIN_ATTR_DIGITAL, No_ADC_Channel, NOT_ON_TIMER, EXTERNAL_INT_NONE, GCLK_CCL_NONE }, // GPIO0
   
   // NC - 28
