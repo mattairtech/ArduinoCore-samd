@@ -54,10 +54,6 @@
  */
 #define NVM_SW_CALIB_DFLL48M_FINE_VAL     (512)
 
-/* Define CORTEX_M_CACHE_ENABLED to enable the Cortex M cache (D51 only).
- */
-#define CORTEX_M_CACHE_ENABLED
-
 /*----------------------------------------------------------------------------
  *        Headers
  *----------------------------------------------------------------------------*/
@@ -116,8 +112,7 @@ extern "C"
 #define PIN_LED3  (4u)
 
 // On-board SPI Flash
-//#define EXTERNAL_FLASH_DEVICES  GD25Q16C
-#define EXTERNAL_FLASH_DEVICES  W25Q32JV
+#define EXTERNAL_FLASH_DEVICES  GD25Q16C
 #define EXTERNAL_FLASH_USE_SPI  SPI1
 #define EXTERNAL_FLASH_USE_CS   SS1
 
@@ -172,7 +167,7 @@ static const uint8_t SCK1  = PIN_SPI1_SCK ;
 #define PIN_WIRE_SDA         -1
 #define PIN_WIRE_SCL         -1
 #define PERIPH_WIRE          sercom0
-#define WIRE_IT_HANDLER     SERCOM0_Handler
+//#define WIRE_IT_HANDLER    // hack! we call the i2c handler from within the serial handler!
 
 static const uint8_t SDA = PIN_WIRE_SDA;
 static const uint8_t SCL = PIN_WIRE_SCL;
