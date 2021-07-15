@@ -516,7 +516,7 @@ void USBDeviceClass::initEP(uint32_t ep, uint32_t config)
 	else if (config == (USB_ENDPOINT_TYPE_BULK | USB_ENDPOINT_OUT(0)))
 	{
 		if (epHandlers[ep] == NULL) {
-			epHandlers[ep] = new DoubleBufferedEPOutHandler(usbd, ep, 256);
+			epHandlers[ep] = new DoubleBufferedEPOutHandler(usbd, ep);
 		}
 	}
 	else if (config == (USB_ENDPOINT_TYPE_BULK | USB_ENDPOINT_IN(0)))
@@ -1092,6 +1092,9 @@ void USBDeviceClass::ISRHandler()
 #endif
 	}
 
+    /* Remove any stall requests for endpoint #0 */
+	if (usbd.epBank0IsStalled(0)) { usbd.epBank0DisableStalled(0); }
+
 	// Endpoint 0 Received Setup interrupt
 	if (usbd.epBank0IsSetupReceived(0))
 	{
@@ -1120,7 +1123,7 @@ void USBDeviceClass::ISRHandler()
 
 		if (usbd.epBank1IsStalled(0))
 		{
-			usbd.epBank1AckStalled(0);
+			// usbd.epBank1AckStalled(0);
 
 			// Remove stall request
 			usbd.epBank1DisableStalled(0);
@@ -1128,27 +1131,27 @@ void USBDeviceClass::ISRHandler()
 
 	} // end Received Setup handler
 
-        uint8_t i = (USB_EPT_NUM - 1);
-        uint8_t ept_int = usbd.epInterruptSummary() & 0xFE; // Remove endpoint number 0 (setup)
-        while (ept_int && i)
-        {
-                // Check if endpoint has a pending interrupt
-                if ((ept_int & (1 << i)) != 0)
-                {
-                        // Endpoint Transfer Complete (0/1) Interrupt
-                        if (usbd.epBank0IsTransferComplete(i) ||
-                            usbd.epBank1IsTransferComplete(i))
-                        {
-                                if (epHandlers[i]) {
-                                        epHandlers[i]->handleEndpoint();
-                                } else {
-                                        handleEndpoint(i);
-                                }
-                        }
-                        ept_int &= ~(1 << i);
-                }
-                i--;
-        }
+    uint8_t i = (USB_EPT_NUM - 1);
+    uint8_t ept_int = usbd.epInterruptSummary() & 0xFE; // Remove endpoint number 0 (setup)
+    while (ept_int && i)
+    {
+            // Check if endpoint has a pending interrupt
+            if ((ept_int & (1 << i)) != 0)
+            {
+                    // Endpoint Transfer Complete (0/1) Interrupt
+                    if (usbd.epBank0IsTransferComplete(i) ||
+                        usbd.epBank1IsTransferComplete(i))
+                    {
+                            if (epHandlers[i]) {
+                                    epHandlers[i]->handleEndpoint();
+                            } else {
+                                    handleEndpoint(i);
+                            }
+                    }
+                    ept_int &= ~(1 << i);
+            }
+            i--;
+    }
 }
 #endif
 
